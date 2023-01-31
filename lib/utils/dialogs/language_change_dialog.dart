@@ -2,6 +2,7 @@
 
 import 'package:dms_new_project/configs/colors.dart';
 import 'package:dms_new_project/helper_widgets/custom_icon_button.dart';
+import 'package:dms_new_project/utils/local_storage_service/language_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,14 +23,15 @@ class _LanguageChangeDialogScreenState extends State<LanguageChangeDialogScreen>
   bool isEnglishSelected=true;
   bool isArabicSelected=false;
   setEnglishLanguage(){
-
-    // MyApp.of(context)!.setLocale( Locale.fromSubtags(languageCode: isEnglishSelected ? 'en' : 'ar'));
+    saveLanguage(isEnglishSelected);
     MyApp.of(context)!.setLocale( Locale.fromSubtags(languageCode:'en'));
-    // MyApp.of(context)!.setLocale( Locale.fromSubtags(languageCode:'ar'));
 
   }
   setArabicLanguage(){
-    MyApp.of(context)!.setLocale( Locale.fromSubtags(languageCode:'ar'));
+    print("Here");
+    saveLanguage(isArabicSelected);
+    print("tHere");
+    MyApp.of(context)!.setLocale(Locale.fromSubtags(languageCode:'ar'));
   }
   @override
   Widget build(BuildContext context) {

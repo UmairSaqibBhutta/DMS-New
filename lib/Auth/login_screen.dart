@@ -2,6 +2,7 @@ import 'package:dms_new_project/Screens/app_screens/dashboard_module/home_dashbo
 import 'package:dms_new_project/configs/colors.dart';
 import 'package:dms_new_project/configs/text_styles.dart';
 import 'package:dms_new_project/helper_services/custom_loader.dart';
+import 'package:dms_new_project/helper_services/navigation_services.dart';
 import 'package:dms_new_project/helper_widgets/default_button.dart';
 import 'package:dms_new_project/services/login_api_services.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
     bool res=await LoginApiService().getUser(context: context, userName: emailCont.text, password: passwordCont.text);
     CustomLoader.hideLoader(context);
     if(res){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeDashBoardScreen()));
+      NavigationServices.goNextAndDoNotKeepHistory(context: context, widget: HomeDashBoardScreen());
     }
   }
 

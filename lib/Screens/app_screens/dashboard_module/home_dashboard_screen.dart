@@ -1,4 +1,5 @@
 
+import 'package:dms_new_project/Auth/login_screen.dart';
 import 'package:dms_new_project/Screens/app_screens/dashboard_module/doc_search_screen.dart';
 import 'package:dms_new_project/Screens/app_screens/folders_module/doc_categories_screen.dart';
 import 'package:dms_new_project/Screens/app_screens/folders_module/doc_subfolders_screen.dart';
@@ -21,6 +22,7 @@ import 'package:dms_new_project/utils/app_localization.dart';
 import 'package:dms_new_project/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../configs/constants.dart';
 import '../../../configs/text_styles.dart';
@@ -79,6 +81,13 @@ final TextEditingController searchCont=TextEditingController();
             isIcon: false,
             iconColor: redColor,
             height: 20.0,
+            onTap: ()async{
+
+              SharedPreferences pref=await SharedPreferences.getInstance();
+              pref.clear();
+              NavigationServices.goNextAndDoNotKeepHistory(context: context, widget: LoginScreen());
+
+            },
             icon: Icons.logout,
           ),
         ],

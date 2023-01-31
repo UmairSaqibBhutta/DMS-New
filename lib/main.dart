@@ -8,6 +8,7 @@ import 'package:dms_new_project/providers/doc_view_provider.dart';
 import 'package:dms_new_project/providers/folers_provider.dart';
 import 'package:dms_new_project/providers/user_data_provider.dart';
 import 'package:dms_new_project/utils/app_localization.dart';
+import 'package:dms_new_project/utils/local_storage_service/language_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = Locale('en', '');
+  bool isEng=true;
+  Locale? _locale = Locale('en','');
 
   void setLocale(Locale value) {
     setState(() {
@@ -41,6 +43,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _getLang();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -52,6 +61,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context)=>DocListProvider()),
         ChangeNotifierProvider(create: (context)=>DocViewProvider())
       ],
+
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -73,6 +83,14 @@ class _MyAppState extends State<MyApp> {
         home: SplashScreen(),
       ),
     );
+  }
+  _getLang()async{
+  isEng=  await   getLanguage();
+  _locale = Locale(isEng?'en':'ar','');
+
+  setState(() {
+
+  });
   }
 }
 
