@@ -1,0 +1,22 @@
+{
+  "home": "Home",
+  "dms_login": "DMS Login",
+  "email": "Email",
+  "password": "Password",
+  "sign_in": "Sign In",
+  "home_dashboard": "Home Dashboard",
+  "language": "Language",
+  "english": "English",
+  "arabic": "Arabic",
+  "log_out": "LogOut",
+  "document_category": "Document Category",
+  "add_document": "Add Document",
+  "search": "Search",
+  "add_new_documents": "Add New Documents",
+  "process": "Process",
+  "document_type": "Document Type",
+  "category_type": "Category Type",
+  "take_picture": "Take Picture",
+  "choose_file": "Choose File",
+  "upload_document": "Upload Document"
+}

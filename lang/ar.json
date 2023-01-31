@@ -1,0 +1,22 @@
+{
+  "home": "مسكن",
+  "dms_login": "د م س تسجيل الدخول ",
+  "email": "بريد الالكتروني",
+  "password": "كلمه السر",
+  "sign_in": "تسجيل الدخول",
+  "home_dashboard": "لوحة القيادة الرئيسية",
+  "language": "لغة",
+  "english": "الإنجليزية",
+  "arabic": "عربى",
+  "log_out": "تسجيل خروج",
+  "document_category": "فئة الوثيقة",
+  "add_document": "أضف وثيقة",
+  "search": "يجد",
+  "add_new_documents": "أضف مستندات جديدة",
+  "process": "معالجة",
+  "document_type": "نوع الوثيقة",
+  "category_type": "نوع الفئة",
+  "take_picture": "التقط صورة",
+  "choose_file": "اختر ملف",
+  "upload_document": "تحميل المستند"
+}
