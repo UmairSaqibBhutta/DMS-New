@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 
 import '../configs/api_configs.dart';
 
-class DocumentsListService{
+class DocumentsListService {
+
+
   Future getDocs({required BuildContext context,required int catId,})async{
     try{
       var res=await GetRequestService().httpGetRequest(context: context, url: docListUrl+"id=$catId&page=");
