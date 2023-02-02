@@ -12,7 +12,8 @@ import '../../../helper_services/navigation_services.dart';
 import 'doc_list_widget.dart';
 
 class DocListScreen extends StatefulWidget {
- final  int catId;
+  final int catId;
+
   DocListScreen({required this.catId});
 
   @override
@@ -20,54 +21,80 @@ class DocListScreen extends StatefulWidget {
 }
 
 class _DocListScreenState extends State<DocListScreen> {
-  getDocList()async{
+  late DocumentsListService doc;
+
+  final ScrollController docController = ScrollController();
+
+  getDocList() async {
     CustomLoader.showLoader(context: context);
-    await DocumentsListService().getDocs(context: context, catId: widget.catId);
+    await doc.getInitDoc(context: context, catId: widget.catId);
+    setState(() {});
     CustomLoader.hideLoader(context);
+    docController.addListener(() async {
+      if (docController.position.maxScrollExtent == docController.offset) {
+        doc.pageNo = doc.pageNo + 1;
+        CustomLoader.showLoader(context: context);
+        await doc.getMoreDocs(context: context, catId: widget.catId);
+        setState(() {});
+        CustomLoader.hideLoader(context);
+      }
+    });
   }
+
   @override
   void initState() {
     // TODO: implement initState
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getDocList();
     });
+    doc = Provider.of<DocumentsListService>(context, listen: false);
     super.initState();
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    doc.pageNo=1;
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: whiteColor,
         iconTheme: iconTheme,
-        title: Text("Documents List",style: dashStyle,),
+        title: Text(
+          "Documents List",
+          style: dashStyle,
+        ),
       ),
-      body:SafeArea(
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0),
-          child: Consumer<DocListProvider>(builder: (context,doc,_){
-            return ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
+            child: ListView.builder(
+                controller: docController,
                 shrinkWrap: true,
                 itemCount: doc.docList!.length,
                 primary: false,
-                itemBuilder: (BuildContext,index){
-              return DocListWidget(
-                doc: doc.docList![index],
-              );
-            });
-          },),
-        ),
+                itemBuilder: (BuildContext, index) {
+                  return DocListWidget(
+                    doc: doc.docList![index],
+                  );
+                })),
       ),
       floatingActionButton: FloatingActionButton(
-      backgroundColor: appColor,
+        backgroundColor: appColor,
         onPressed: () {
-        NavigationServices.goNextAndKeepHistory(context: context, widget: AddNewDocumentsScreen(
-            attribute:Provider.of<DocListProvider>(context,listen: false).docList![0].attribute!,
-        ));
+          NavigationServices.goNextAndKeepHistory(
+              context: context,
+              widget: AddNewDocumentsScreen(
+                attribute: doc.docList![0]
+                    .attribute!,
+              ));
+
         },
         child: Icon(Icons.add),
-
       ),
     );
   }
-
 }

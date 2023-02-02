@@ -7,11 +7,13 @@ import 'package:dms_new_project/providers/doc_search_provider.dart';
 import 'package:dms_new_project/providers/doc_view_provider.dart';
 import 'package:dms_new_project/providers/folers_provider.dart';
 import 'package:dms_new_project/providers/user_data_provider.dart';
+import 'package:dms_new_project/services/doc_list_service.dart';
 import 'package:dms_new_project/utils/app_localization.dart';
 import 'package:dms_new_project/utils/local_storage_service/language_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -61,6 +63,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => DocSearchProvider()),
         ChangeNotifierProvider(create: (context) => FoldersProvider()),
         ChangeNotifierProvider(create: (context) => DocListProvider()),
+        ChangeNotifierProvider(create: (context)=> DocumentsListService()),
         ChangeNotifierProvider(create: (context) => DocViewProvider())
       ],
       child: MaterialApp(
