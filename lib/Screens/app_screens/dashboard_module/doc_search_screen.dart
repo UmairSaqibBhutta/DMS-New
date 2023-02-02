@@ -1,5 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:dms_new_project/models/doc_view_model.dart';
 import 'package:dms_new_project/providers/doc_search_provider.dart';
+import 'package:dms_new_project/providers/doc_view_provider.dart';
+import 'package:dms_new_project/utils/handlers.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../configs/colors.dart';
@@ -27,6 +36,7 @@ class _DocSearchScreenState extends State<DocSearchScreen> {
    await DocSearchService().getSearch(context: context, searchText: widget.searchText, catId: widget.catId);
     CustomLoader.hideLoader(context);
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -62,10 +72,17 @@ class _DocSearchScreenState extends State<DocSearchScreen> {
     );
   }
 }
-class SearchWidget extends StatelessWidget {
+class SearchWidget extends StatefulWidget {
   SearchList search;
    SearchWidget({required this.search});
 
+  @override
+  State<SearchWidget> createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  DocViewModel ? view;
+  String filePath="";
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -80,7 +97,7 @@ class SearchWidget extends StatelessWidget {
           SizedBox(
             height: 50.0,
             child: ListView.builder(
-                itemCount: search.attribute!.length,
+                itemCount: widget.search.attribute!.length,
                 shrinkWrap: true,
                 primary: false,
                 scrollDirection: Axis.horizontal,
@@ -91,8 +108,8 @@ class SearchWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("${search.attribute![index].name}",style: headerStyle,),
-                        Text("${search.attribute![index].value}",style: attStyle,),
+                        Text("${widget.search.attribute![index].name}",style: headerStyle,),
+                        Text("${widget.search.attribute![index].value}",style: attStyle,),
                       ],
                     ),
                   );
@@ -105,22 +122,29 @@ class SearchWidget extends StatelessWidget {
             child: ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
               leading: Image.asset(
-                  search.documentType=="JPG"?jpg:
-                  search.documentType=="PDF"?pdf:
-                  search.documentType=="JPEG"?jpg:
-                  search.documentType=="XLS"?xls:
-                  search.documentType=="XLSX"?xls:
-                  search.documentType=="PPTX"?ppt:
+                  widget.search.documentType=="JPG"?jpg:
+                  widget.search.documentType=="PDF"?pdf:
+                  widget.search.documentType=="JPEG"?jpg:
+                  widget.search.documentType=="XLS"?xls:
+                  widget.search.documentType=="XLSX"?xls:
+                  widget.search.documentType=="PPTX"?ppt:
                   png
               ),
-              title: Text("${search.uploadedBy}"),
-              subtitle: Text("${search.uploadedDate}"),
+              title: Text("${widget.search.uploadedBy}"),
+              subtitle: Text("${widget.search.uploadedDate}"),
               trailing: InkWell(
-                onTap: (){
-                  search.attachmentStatus=="Complete"?NavigationServices.goNextAndKeepHistory(context: context, widget: DocViewScreen(
-                    filePath: "${search.noofVersions??""}",
-                  )):
+                onTap: ()async{
+
+                  if(widget.search.attachmentStatus=="Complete"){
+                  await  docViewHandler(context: context, filePath: widget.search.noofVersions??"");
+                    view=Provider.of<DocViewProvider>(context,listen: false).docView!;
+                    await  _createFileFromBase64();
+                    OpenFile.open(filePath);
+
+                  }
+                  else{
                   showPendingDialog(context);
+                  }
                 },
                 child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
@@ -129,12 +153,12 @@ class SearchWidget extends StatelessWidget {
                           10.0,
                         ),
                         border: Border.all(
-                            color: search.attachmentStatus == "Complete"
+                            color: widget.search.attachmentStatus == "Complete"
                                 ? greenColor
                                 : redColor,
                             width: 1.5)),
                     child: Text(
-                      "${search.attachmentStatus}",
+                      "${widget.search.attachmentStatus}",
                       style: compStyle,
                     )),
               ),
@@ -143,5 +167,25 @@ class SearchWidget extends StatelessWidget {
       ),
     );
   }
+  _createFileFromBase64() async {
+    final encodedStr = "${view!.data}";
+
+    Uint8List bytes = base64.decode(encodedStr);
+
+    String dir = (await getApplicationDocumentsDirectory()).path;
+
+    File file = File(
+      // "$dir/" + DateTime.now().millisecondsSinceEpoch.toString() + ".pdf");
+        "$dir/" + widget.search.noofVersions!);
+
+    await file.writeAsBytes(bytes);
+    filePath = file.path;
+    setState(() {});
+    print("fILE 1 $filePath");
+    return filePath;
+
+    // return filePath;
+  }
 }
+
 

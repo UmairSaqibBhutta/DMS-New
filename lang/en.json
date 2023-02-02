@@ -5,6 +5,8 @@
   "password": "Password",
   "sign_in": "Sign In",
   "home_dashboard": "Home Dashboard",
+  "select_category": "Select Category",
+  "search_doc":"Search Documents",
   "language": "Language",
   "english": "English",
   "arabic": "Arabic",

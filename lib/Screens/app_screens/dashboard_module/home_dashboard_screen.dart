@@ -20,6 +20,7 @@ import 'package:dms_new_project/services/doc_search_service.dart';
 import 'package:dms_new_project/services/folder_service.dart';
 import 'package:dms_new_project/utils/app_localization.dart';
 import 'package:dms_new_project/utils/constants.dart';
+import 'package:dms_new_project/utils/local_storage_service/save_user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,7 +49,8 @@ final TextEditingController searchCont=TextEditingController();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getCatHandler(context:context);
-      getFoldersHandler(context: context, empId: Provider.of<UserDataProvider>(context,listen: false).user!.empId??0, roleName: Provider.of<UserDataProvider>(context,listen: false).user!.roleName??"");
+
+      getFoldersHandler(context: context, roleName: "Admin");
     });
     super.initState();
   }
@@ -102,7 +104,7 @@ final TextEditingController searchCont=TextEditingController();
               children: [
 
                 CustomDropDownText(
-                  text: "Select Category",
+                  text: AppLocalizations.of(context)!.translate(SelectCat).toString(),
                 ),
           Consumer<CategoriesListProvider>(builder: (context,cat,_){
             return
@@ -112,7 +114,7 @@ final TextEditingController searchCont=TextEditingController();
                value: selectedCat,
                underline: SizedBox(),
                isExpanded: true,
-               hint: Text("Select Category"),
+               hint: Text( AppLocalizations.of(context)!.translate(SelectCat).toString(),),
                items: cat.catList!.map((item){
                  return DropdownMenuItem(
                    child:Text(item.name??""),
@@ -128,15 +130,21 @@ final TextEditingController searchCont=TextEditingController();
          );
           }),
                 CustomTextField(
-                  headerText: "Search Documents",
+                  headerText: AppLocalizations.of(context)!.translate(SearchDoc).toString(),
                   hintText: "Search",
                   controller: searchCont,
                   suffixIcon: Icons.search,
+                  suffixOnTap: (){
+                    selectedCat!=null?
+                    NavigationServices.goNextAndKeepHistory(context: context, widget: DocSearchScreen(searchText: searchCont.text,catId: selectedCat??0,)):
+                    CustomSnackBar.failedSnackBar(context: context, message: "Select Category First");
+                    searchCont.clear();
+                  },
                   onSubmit: (value){
                     selectedCat!=null?
                     NavigationServices.goNextAndKeepHistory(context: context, widget: DocSearchScreen(searchText: searchCont.text,catId: selectedCat??0,)):
                     CustomSnackBar.failedSnackBar(context: context, message: "Select Category First");
-
+                    searchCont.clear();
                   },
                 ),
            

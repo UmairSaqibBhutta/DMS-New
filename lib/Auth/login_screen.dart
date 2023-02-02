@@ -5,6 +5,8 @@ import 'package:dms_new_project/helper_services/custom_loader.dart';
 import 'package:dms_new_project/helper_services/navigation_services.dart';
 import 'package:dms_new_project/helper_widgets/default_button.dart';
 import 'package:dms_new_project/services/login_api_services.dart';
+import 'package:dms_new_project/utils/app_localization.dart';
+import 'package:dms_new_project/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../configs/constants.dart';
@@ -56,14 +58,14 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 260.0,
             width: double.infinity,
             color: appColor,
-            child: Text("DMS Login",style: loginStyle,),
+            child: Text(AppLocalizations.of(context)!.translate(DMSLOGIN).toString(),style: loginStyle,),
           ),
           Align(
             alignment: Alignment.center,
             child: Container(
               width: double.infinity,
 
-              height: 370.0,
+              height: 390.0,
               child: Card(
                 margin: EdgeInsets.only(left: 18.0,right: 18.0),
 
@@ -81,14 +83,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       maxRadius: 50.0,
                       ),
                       CustomTextField(
-                        headerText: "Email",
+                        headerText: AppLocalizations.of(context)!.translate(EMAIL).toString(),
                         hintText: "Email Address",
                         controller: emailCont,
                         inputType: TextInputType.emailAddress,
                         inputAction: TextInputAction.next,
                       ),
                       CustomTextField(
-                        headerText: "Password",
+                        headerText: AppLocalizations.of(context)!.translate(PASSWORD).toString(),
                         hintText: "*****",
                         controller: passwordCont,
                         inputType: TextInputType.number,
@@ -102,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       ),
                       DefaultButton(
-                        text: "Sign in",
+                        text: AppLocalizations.of(context)!.translate(SIGNIN).toString(),
 
                         onTap: (){
                           loginHandler();

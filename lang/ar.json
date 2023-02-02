@@ -5,6 +5,8 @@
   "password": "كلمه السر",
   "sign_in": "تسجيل الدخول",
   "home_dashboard": "لوحة القيادة الرئيسية",
+  "select_category":"اختر الفئة",
+  "search_doc": "وثائق البحث",
   "language": "لغة",
   "english": "الإنجليزية",
   "arabic": "عربى",

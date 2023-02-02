@@ -12,6 +12,7 @@ import 'package:dms_new_project/utils/local_storage_service/language_storage_ser
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -20,9 +21,10 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
+
 void main() {
   HttpOverrides.global = MyHttpOverrides();
-  runApp( MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -34,8 +36,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool isEng=true;
-  Locale? _locale = Locale('en','');
+  bool isEng = true;
+  Locale? _locale = Locale('en', '');
 
   void setLocale(Locale value) {
     setState(() {
@@ -43,29 +45,27 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
     _getLang();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context)=>UserDataProvider()),
-        ChangeNotifierProvider(create: (context)=>CategoriesListProvider()),
-        ChangeNotifierProvider(create: (context)=>DocSearchProvider()),
-        ChangeNotifierProvider(create: (context)=>FoldersProvider()),
-        ChangeNotifierProvider(create: (context)=>DocListProvider()),
-        ChangeNotifierProvider(create: (context)=>DocViewProvider())
+        ChangeNotifierProvider(create: (context) => UserDataProvider()),
+        ChangeNotifierProvider(create: (context) => CategoriesListProvider()),
+        ChangeNotifierProvider(create: (context) => DocSearchProvider()),
+        ChangeNotifierProvider(create: (context) => FoldersProvider()),
+        ChangeNotifierProvider(create: (context) => DocListProvider()),
+        ChangeNotifierProvider(create: (context) => DocViewProvider())
       ],
-
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-
           primarySwatch: Colors.blue,
         ),
         supportedLocales: const [
@@ -73,7 +73,6 @@ class _MyAppState extends State<MyApp> {
           Locale('ar', ''),
           Locale('ur', ''),
         ],
-
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -84,14 +83,11 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-  _getLang()async{
-  isEng=  await   getLanguage();
-  _locale = Locale(isEng?'en':'ar','');
 
-  setState(() {
+  _getLang() async {
+    isEng = await getLanguage();
+    _locale = Locale(isEng ? 'en' : 'ar', '');
 
-  });
+    setState(() {});
   }
 }
-
-
