@@ -29,7 +29,7 @@ class LoginApiService {
         );
 
         saveUser(jsonEncode(userModel.data!.toJson()));
-        print("Save User ${(jsonEncode(userModel.data!.toJson()))}");
+        // print("Save User ${(jsonEncode(userModel.data!.toJson()))}");
 
         return true;
       }

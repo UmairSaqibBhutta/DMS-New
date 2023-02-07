@@ -1,4 +1,4 @@
-import 'package:dms_new_project/Screens/app_screens/doc_module/add_new_doc.dart';
+import 'package:dms_new_project/Screens/app_screens/doc_module/upload_doc_screen.dart';
 import 'package:dms_new_project/configs/colors.dart';
 import 'package:dms_new_project/configs/constants.dart';
 import 'package:dms_new_project/configs/text_styles.dart';
@@ -64,7 +64,7 @@ class _DocListScreenState extends State<DocListScreen> {
         backgroundColor: whiteColor,
         iconTheme: iconTheme,
         title: Text(
-          "Documents List",
+          "Documents List ${doc.docList!.length}",
           style: dashStyle,
         ),
       ),

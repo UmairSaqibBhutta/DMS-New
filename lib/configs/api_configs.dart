@@ -7,3 +7,4 @@ const String docSearchUrl=baseUrl+"SearchDocument/GlobalSearch?";
 const String foldersUrl=baseUrl+"Folder/GetFolders?";
 const String docListUrl=baseUrl + "Document/GetDocumentById?";
 const String docViewUrl=baseUrl + "File/GetFileByName?";
+const String uploadDocUrl=baseUrl + "AddDocument";

@@ -47,7 +47,7 @@ class _DocListWidgetState extends State<DocListWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 50.0,
+            height: widget.doc.attribute!.length==0?0.0:50.0,
             child: ListView.builder(
                 itemCount: widget.doc.attribute!.length,
                 shrinkWrap: true,

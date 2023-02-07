@@ -1,8 +1,10 @@
 import 'package:dms_new_project/configs/colors.dart';
 import 'package:dms_new_project/configs/text_styles.dart';
+import 'package:dms_new_project/helper_services/custom_loader.dart';
 import 'package:dms_new_project/helper_widgets/custom_icon_button.dart';
 import 'package:dms_new_project/helper_widgets/custom_textfield.dart';
 import 'package:dms_new_project/helper_widgets/default_button.dart';
+import 'package:dms_new_project/services/upload_doc_service.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,12 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
     // TODO: implement initState
     for (int i = 1; i <= widget.attribute!.length; i++) _controller.add(TextEditingController());
     super.initState();
+  }
+
+  uploadDocHandler()async{
+    CustomLoader.showLoader(context: context);
+    await UploadDocumentService().uploadDoc(context: context, catId: 39, notes: 'test by team', empId: 1000012, userName: 'l.lotfy', model: [0],);
+    CustomLoader.hideLoader(context);
   }
   @override
   Widget build(BuildContext context) {
@@ -120,7 +128,9 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
               height: 38.0,
               text: "Upload Documents",
               width: 200.0,
-              onTap: (){},
+              onTap: (){
+                uploadDocHandler();
+              },
             ),
           ],
         ),

@@ -11,15 +11,23 @@ class PostRequestService {
       required Map body}) async {
     print("Url $url");
     try {
-      http.Response response = await http.post(Uri.parse(url), body: body);
+      var headers={
+        "Content-Type":"application/json"
+      };
+      http.Response response = await http.post(Uri.parse(url), body: json.encode(body),headers: headers);
       print("Post request body ${response.body}");
       print("Post Request status code ${response.statusCode}");
+      print("Above");
       var jsonDecoded=json.decode(response.body);
+      print("Lower");
       if (jsonDecoded==null || jsonDecoded['ResultType']!=1) {
-        CustomSnackBar.failedSnackBar(context: context, message: jsonDecoded['Message']);
+        // CustomSnackBar.failedSnackBar(context: context, message: jsonDecoded['Message']);
         return null;
       } else
-        return jsonDecoded;
+        {
+
+          return jsonDecoded;
+        }
     } catch (err) {
       print("Exception Custom Post Request service $err");
       return null;
