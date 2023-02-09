@@ -5,11 +5,13 @@ import 'dart:typed_data';
 
 import 'package:dms_new_project/configs/colors.dart';
 import 'package:dms_new_project/helper_services/custom_snackbar.dart';
-import 'package:dms_new_project/helper_services/navigation_services.dart';
-import 'package:dms_new_project/helper_widgets/custom_icon_button.dart';
+
 import 'package:dms_new_project/models/doc_list_model.dart';
 import 'package:dms_new_project/utils/handlers.dart';
+import 'package:dms_new_project/utils/local_storage_service/save_user_service.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +21,9 @@ import '../../../configs/text_styles.dart';
 import '../../../helper_services/custom_loader.dart';
 import '../../../models/doc_view_model.dart';
 import '../../../providers/doc_view_provider.dart';
-import '../../../services/doc_view_service.dart';
+import '../../../services/attach_doc_service.dart';
 import '../../../utils/dialogs/status_pending_dialog.dart';
-import 'doc_view_screen.dart';
+
 
 class DocListWidget extends StatefulWidget {
   DocumentsList doc;
@@ -35,6 +37,21 @@ class DocListWidget extends StatefulWidget {
 class _DocListWidgetState extends State<DocListWidget> {
   String filePath = '';
   DocViewModel? view;
+  PickedFile? cameraFile;
+FilePickerResult? pickFile;
+
+  attachDocHandler(String path) async {
+    CustomLoader.showLoader(context: context);
+    int empId = await getEmpId();
+    String userName = await getUserName();
+    await AttachDocService().attachDoc(
+        context: context,
+        docId: widget.doc.documentId!,
+        empId: empId,
+        userName: userName,
+        attachments: "$path");
+    CustomLoader.hideLoader(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +64,7 @@ class _DocListWidgetState extends State<DocListWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: widget.doc.attribute!.length==0?0.0:50.0,
+            height: widget.doc.attribute!.length == 0 ? 0.0 : 50.0,
             child: ListView.builder(
                 itemCount: widget.doc.attribute!.length,
                 shrinkWrap: true,
@@ -95,7 +112,7 @@ class _DocListWidgetState extends State<DocListWidget> {
                                   ? xls
                                   : widget.doc.documentType == "PPTX"
                                       ? ppt
-                                      : png),
+                                      : placeHolder),
               title: Text("${widget.doc.uploadedBy}"),
               subtitle: Text("${widget.doc.uploadedDate}"),
               trailing: InkWell(
@@ -114,7 +131,20 @@ class _DocListWidgetState extends State<DocListWidget> {
                         : CustomSnackBar.failedSnackBar(
                             context: context, message: "File is incorrect");
                   } else {
-                    showPendingDialog(context);
+                    showPendingDialog(
+                      context: context,
+                      cameraOnTap: () async {
+                        await takePicture();
+                        setState(() {
+                          attachDocHandler(
+                              cameraFile!.path
+                          );
+                        });
+                      },
+                      chooseOnTap: (){
+                        chooseFile();
+                      }
+                    );
                   }
                 },
                 child: Container(
@@ -159,5 +189,25 @@ class _DocListWidgetState extends State<DocListWidget> {
     return filePath;
 
     // return filePath;
+  }
+
+  takePicture() async {
+    cameraFile = await ImagePicker().getImage(source: ImageSource.camera);
+    print("My Path ${cameraFile!.path}");
+  }
+
+  chooseFile() async {
+    pickFile = await FilePicker.platform.pickFiles(
+      withData: true,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'doc', 'png', 'mp4', 'mkv'],
+    );
+    if (pickFile != null) {
+      PlatformFile file = pickFile!.files.first;
+      attachDocHandler(
+        "${file.path}"
+      );
+      print("file.path ${file.path}");
+    }
   }
 }

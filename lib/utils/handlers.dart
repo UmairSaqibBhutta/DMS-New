@@ -1,3 +1,4 @@
+import 'package:dms_new_project/services/attach_doc_service.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../helper_services/custom_loader.dart';
@@ -28,3 +29,4 @@ docViewHandler({required BuildContext context,required String filePath})async{
   await DocViewService().viewDoc(context: context, filePath: "$filePath");
   CustomLoader.hideLoader(context);
 }
+

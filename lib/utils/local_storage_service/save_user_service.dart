@@ -20,3 +20,9 @@ getEmpId()async{
   print("Emp Id ${user.empId}");
   return user.empId;
 }
+getUserName()async{
+  String userName=await getUser();
+  UserModel name=UserModel.fromJson(json.decode(userName));
+  print("User Name $userName");
+  return name.name;
+}

@@ -6,7 +6,7 @@ import '../../configs/constants.dart';
 import '../../configs/text_styles.dart';
 import '../../helper_widgets/custom_icon_button.dart';
 
-showPendingDialog(BuildContext context){
+showPendingDialog({required BuildContext context, Function()? cameraOnTap,Function()?chooseOnTap}){
   return showDialog(context: context, builder: (context){
     return Dialog(
       alignment: Alignment.center,
@@ -37,7 +37,7 @@ showPendingDialog(BuildContext context){
                 children: [
                   Expanded(
                     child: CustomIconButton(
-                      onTap: (){},
+                      onTap: cameraOnTap,
                       icon: Icons.camera,
                       bgColor: whiteColor,
                       borderColor: appColor,
@@ -49,7 +49,7 @@ showPendingDialog(BuildContext context){
                   ),
                   Expanded(
                     child: CustomIconButton(
-                      onTap: (){},
+                      onTap: chooseOnTap,
                       text: "Choose File",
                       fontSize: 12.0,
                       iconColor: appColor,

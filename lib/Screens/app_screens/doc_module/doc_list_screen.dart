@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../helper_services/navigation_services.dart';
+import '../../../services/attach_doc_service.dart';
 import 'doc_list_widget.dart';
 
 class DocListScreen extends StatefulWidget {
@@ -90,7 +91,9 @@ class _DocListScreenState extends State<DocListScreen> {
               widget: AddNewDocumentsScreen(
                 attribute: doc.docList![0]
                     .attribute!,
-              ));
+                catId: widget.catId,
+              )
+          );
 
         },
         child: Icon(Icons.add),

@@ -11,6 +11,7 @@ const String png="assets/icons/png_icon.png";
 const String ppt="assets/icons/ppt_icon.png";
 const String word="assets/icons/word_icon.png";
 const String xls="assets/icons/xls_icon.png";
+const String placeHolder="assets/icons/image_placeholder.png";
 
 /////////////////////////
 IconThemeData iconTheme=IconThemeData(color: blackColor);

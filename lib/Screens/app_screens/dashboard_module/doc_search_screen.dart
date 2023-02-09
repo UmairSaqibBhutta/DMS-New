@@ -143,7 +143,7 @@ class _SearchWidgetState extends State<SearchWidget> {
 
                   }
                   else{
-                  showPendingDialog(context);
+                  showPendingDialog(context: context);
                   }
                 },
                 child: Container(
