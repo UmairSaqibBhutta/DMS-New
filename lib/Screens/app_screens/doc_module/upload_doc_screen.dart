@@ -51,6 +51,8 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
       userName: '$userName',
       model: [0],
       attachments: pFile!.path??"",
+      attributes: widget.attribute!,
+      contList: _controller,
     );
     print("Cat Id ${widget.catId}");
     CustomLoader.hideLoader(context);
