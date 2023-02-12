@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dms_new_project/configs/api_configs.dart';
+import 'package:dms_new_project/helper_services/custom_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,13 +28,21 @@ class AttachDocService{
               filename: attachments.split("/").last
           )
       );
+    
       var response=await request.send();
+     
       final body=await response.stream.bytesToString();
-      var jsonDecoded=json.decode("Body $body");
+
+
+      var jsonDecoded=json.decode("My Body $body");
+
       if(jsonDecoded==null){
         print("Attachments Not Uploaded");
+        CustomSnackBar.failedSnackBar(context: context, message: jsonDecoded['Message']);
       }
       else{
+        CustomSnackBar.showSnackBar(context: context, message: jsonDecoded['Message']);
+
         print("Attachments Uploaded Successfully");
         return jsonDecoded;
       }

@@ -44,13 +44,16 @@ FilePickerResult? pickFile;
     CustomLoader.showLoader(context: context);
     int empId = await getEmpId();
     String userName = await getUserName();
-    await AttachDocService().attachDoc(
+    var res=await AttachDocService().attachDoc(
         context: context,
         docId: widget.doc.documentId!,
         empId: empId,
         userName: userName,
         attachments: "$path");
     CustomLoader.hideLoader(context);
+    // if(res){
+    //   CustomSnackBar.showSnackBar(context: context, message: "Doc Uploades Successfully");
+    // }
   }
 
   @override
@@ -134,15 +137,19 @@ FilePickerResult? pickFile;
                     showPendingDialog(
                       context: context,
                       cameraOnTap: () async {
+                        Navigator.pop(context);
                         await takePicture();
                         setState(() {
                           attachDocHandler(
                               cameraFile!.path
                           );
+
                         });
+
                       },
-                      chooseOnTap: (){
-                        chooseFile();
+                      chooseOnTap: ()async{
+                        Navigator.pop(context);
+                       await chooseFile();
                       }
                     );
                   }

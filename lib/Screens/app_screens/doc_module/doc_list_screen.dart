@@ -26,27 +26,12 @@ class _DocListScreenState extends State<DocListScreen> {
 
   final ScrollController docController = ScrollController();
 
-  getDocList() async {
-    CustomLoader.showLoader(context: context);
-    await doc.getInitDoc(context: context, catId: widget.catId);
-    setState(() {});
-    CustomLoader.hideLoader(context);
-    docController.addListener(() async {
-      if (docController.position.maxScrollExtent == docController.offset) {
-        doc.pageNo = doc.pageNo + 1;
-        CustomLoader.showLoader(context: context);
-        await doc.getMoreDocs(context: context, catId: widget.catId);
-        setState(() {});
-        CustomLoader.hideLoader(context);
-      }
-    });
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getDocList();
+      docListHandler();
     });
     doc = Provider.of<DocumentsListService>(context, listen: false);
     super.initState();
@@ -69,19 +54,25 @@ class _DocListScreenState extends State<DocListScreen> {
           style: dashStyle,
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12.0),
-            child: ListView.builder(
-                controller: docController,
-                shrinkWrap: true,
-                itemCount: doc.docList!.length,
-                primary: false,
-                itemBuilder: (BuildContext, index) {
-                  return DocListWidget(
-                    doc: doc.docList![index],
-                  );
-                })),
+      body: RefreshIndicator(
+        onRefresh: () {
+        return  docListHandler();
+        },
+        child: SafeArea(
+          child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: ListView.builder(
+                  controller: docController,
+                  shrinkWrap: true,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemCount: doc.docList!.length,
+                  primary: false,
+                  itemBuilder: (BuildContext, index) {
+                    return DocListWidget(
+                      doc: doc.docList![index],
+                    );
+                  })),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: appColor,
@@ -99,5 +90,21 @@ class _DocListScreenState extends State<DocListScreen> {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  docListHandler() async {
+    CustomLoader.showLoader(context: context);
+    await doc.getInitDoc(context: context, catId: widget.catId);
+    setState(() {});
+    CustomLoader.hideLoader(context);
+    docController.addListener(() async {
+      if (docController.position.maxScrollExtent == docController.offset) {
+        doc.pageNo = doc.pageNo + 1;
+        CustomLoader.showLoader(context: context);
+        await doc.getMoreDocs(context: context, catId: widget.catId);
+        setState(() {});
+        CustomLoader.hideLoader(context);
+      }
+    });
   }
 }

@@ -9,7 +9,8 @@ import '../models/doc_list_model.dart';
 
 class UploadDocumentService {
   Future uploadDoc(
-      {required int catId,
+      {bool isAttach=false,
+        required int catId,
       required String notes,
       required int empId,
       required String userName,

@@ -39,26 +39,29 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
     super.initState();
   }
 
+  bool isAttach = false;
+
   uploadDocHandler() async {
     CustomLoader.showLoader(context: context);
-    int empId=await getEmpId();
-    String userName=await getUserName();
-    var res=await UploadDocumentService().uploadDoc(
+    int empId = await getEmpId();
+    String userName = await getUserName();
+    var res = await UploadDocumentService().uploadDoc(
       context: context,
       catId: widget.catId,
       notes: 'test by team',
       empId: empId,
       userName: '$userName',
       model: [0],
-      attachments: pFile!.path??"",
+      attachments: pFile!.path ?? "",
       attributes: widget.attribute!,
       contList: _controller,
     );
+    print("Pfile $pFile");
     print("Cat Id ${widget.catId}");
     CustomLoader.hideLoader(context);
-    if(res!=null){
-      CustomSnackBar.showSnackBar(context: context, message: "Documents Uploaded Successfully");
-
+    if (res != null) {
+      CustomSnackBar.showSnackBar(
+          context: context, message: "Documents Uploaded Successfully");
     }
   }
 
@@ -116,7 +119,6 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-
                             Text(pFile != null
                                 ? "${pFile!.path!.split("/").last}"
                                 : ""),
@@ -152,9 +154,14 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
               height: 38.0,
               text: "Upload Documents",
               width: 200.0,
-              onTap: () {
-                uploadDocHandler();
-              },
+              onTap: ()async{
+
+               await uploadDocHandler();
+               Navigator.pop(context);
+
+              }
+
+
             ),
           ],
         ),
