@@ -44,16 +44,14 @@ FilePickerResult? pickFile;
     CustomLoader.showLoader(context: context);
     int empId = await getEmpId();
     String userName = await getUserName();
-    var res=await AttachDocService().attachDoc(
+     await AttachDocService().attachDoc(
         context: context,
         docId: widget.doc.documentId!,
         empId: empId,
         userName: userName,
         attachments: "$path");
     CustomLoader.hideLoader(context);
-    // if(res){
-    //   CustomSnackBar.showSnackBar(context: context, message: "Doc Uploades Successfully");
-    // }
+
   }
 
   @override
@@ -207,7 +205,7 @@ FilePickerResult? pickFile;
     pickFile = await FilePicker.platform.pickFiles(
       withData: true,
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'doc', 'png', 'mp4', 'mkv'],
+      allowedExtensions: ['jpg', 'pdf', 'doc', 'png', 'mkv'],
     );
     if (pickFile != null) {
       PlatformFile file = pickFile!.files.first;

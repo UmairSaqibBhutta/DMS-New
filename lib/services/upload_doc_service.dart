@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dms_new_project/helper_services/custom_post_request_service.dart';
+import 'package:dms_new_project/helper_services/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../configs/api_configs.dart';
@@ -53,16 +54,15 @@ class UploadDocumentService {
       final respStr = await response.stream.bytesToString();
 
       print("request body ${respStr}");
+      if(response.statusCode==200){
+        CustomSnackBar.showSnackBar(context: context, message: "Document Uploaded Successfully");
+      }
+      else{
+        CustomSnackBar.failedSnackBar(context: context, message: "Documents Not Uploaded");
+      }
       var jsonDecoded=json.decode("Body ${requestBody}");
 
-      if (jsonDecoded==null) {
-        print("Doc not Uploaded");
-        return true;
-      } else {
 
-        print("DOc Uploaded Successfully");
-        return jsonDecoded;
-      }
     } catch (err) {
       print("Exception in upload documnet servoce $err");
       return null;
