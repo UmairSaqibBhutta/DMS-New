@@ -172,6 +172,7 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
   }
 
   uploadFile() async {
+
     file = await FilePicker.platform.pickFiles(
       withData: true,
       type: FileType.custom,
