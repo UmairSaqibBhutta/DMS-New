@@ -10,7 +10,9 @@ import 'package:dms_new_project/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../configs/constants.dart';
+import '../helper_services/custom_snackbar.dart';
 import '../helper_widgets/custom_textfield.dart';
+import '../utils/helper_functions/email_validator.dart';
 
 
 
@@ -31,10 +33,12 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordCont=TextEditingController(
     text: "Almajed4oud@123"
   );
+  FocusNode emailFocus=FocusNode();
+  FocusNode passwordFocus=FocusNode();
 
   loginHandler()async{
     CustomLoader.showLoader(context: context);
-    bool res=await LoginApiService().getUser(context: context, userName: emailCont.text, password: passwordCont.text);
+    var res=await LoginApiService().getUser(context: context, userName: emailCont.text, password: passwordCont.text);
     CustomLoader.hideLoader(context);
     if(res){
       NavigationServices.goNextAndDoNotKeepHistory(context: context, widget: HomeDashBoardScreen());
@@ -86,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         headerText: AppLocalizations.of(context)!.translate(EMAIL).toString(),
                         hintText: "Email Address",
                         controller: emailCont,
+                        focusNode: emailFocus,
                         inputType: TextInputType.emailAddress,
                         inputAction: TextInputAction.next,
                       ),
@@ -93,6 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         headerText: AppLocalizations.of(context)!.translate(PASSWORD).toString(),
                         hintText: "*****",
                         controller: passwordCont,
+                        focusNode: passwordFocus,
                         inputType: TextInputType.number,
                         obscureText: isObscure,
                         suffixIcon: isObscure?Icons.visibility:Icons.visibility_off,
@@ -107,7 +113,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         text: AppLocalizations.of(context)!.translate(SIGNIN).toString(),
 
                         onTap: (){
-                          loginHandler();
+                      if(validateLogin()){
+                        loginHandler();
+                      }
                         },
 
                       )
@@ -122,4 +130,20 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+  validateLogin(){
+    if(emailCont.text.isEmpty || !emailValidator(emailCont.text)){
+      CustomSnackBar.failedSnackBar(context: context, message: "Enter Valid Email");
+      emailFocus.requestFocus();
+      return false;
+    }
+    else if(passwordCont.text.isEmpty){
+      CustomSnackBar.failedSnackBar(context: context, message: "Enter Valid Password");
+      passwordFocus.requestFocus();
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
 }

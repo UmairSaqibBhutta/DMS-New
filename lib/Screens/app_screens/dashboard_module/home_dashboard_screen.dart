@@ -1,4 +1,3 @@
-
 import 'package:dms_new_project/Auth/login_screen.dart';
 import 'package:dms_new_project/Screens/app_screens/dashboard_module/doc_search_screen.dart';
 import 'package:dms_new_project/Screens/app_screens/folders_module/doc_categories_screen.dart';
@@ -43,14 +42,14 @@ class HomeDashBoardScreen extends StatefulWidget {
 
 class _HomeDashBoardScreenState extends State<HomeDashBoardScreen> {
   int? selectedCat;
-final TextEditingController searchCont=TextEditingController();
+  final TextEditingController searchCont = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getCatHandler(context:context);
+      getCatHandler(context: context);
 
       getFoldersHandler(context: context, roleName: "Admin");
     });
@@ -60,46 +59,42 @@ final TextEditingController searchCont=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()async {
-
-          final shouldPop = await showCupertinoModalPopup(
-              context: context, builder: (context){
-            return showWillPopDialog(context);
-          });
-          return shouldPop!;
+      onWillPop: () async {
+        final shouldPop = await showCupertinoModalPopup(
+            context: context,
+            builder: (context) {
+              return showWillPopDialog(context);
+            });
+        return shouldPop!;
       },
       child: Scaffold(
-
         backgroundColor: whiteColor,
-
         appBar: AppBar(
-        leading:  CustomIconButton(
-          width: 50.0,
-          isIcon: false,
-          iconColor: appColor,
-          height: 20.0,
-          icon: Icons.language_outlined,
-          onTap: (){
-            languageChangeDialog(
-
-            );
-          },
-        ),
+          leading: CustomIconButton(
+            width: 50.0,
+            isIcon: false,
+            iconColor: appColor,
+            height: 20.0,
+            icon: Icons.language_outlined,
+            onTap: () {
+              languageChangeDialog();
+            },
+          ),
           backgroundColor: whiteColor,
-          title: Text(AppLocalizations.of(context)!.translate(HOMEDASHBOARD).toString(),style: dashStyle,),
-
+          title: Text(
+            AppLocalizations.of(context)!.translate(HOMEDASHBOARD).toString(),
+            style: dashStyle,
+          ),
           actions: [
-
             CustomIconButton(
               isIcon: false,
               iconColor: redColor,
               height: 20.0,
-              onTap: ()async{
-
-                SharedPreferences pref=await SharedPreferences.getInstance();
+              onTap: () async {
+                SharedPreferences pref = await SharedPreferences.getInstance();
                 pref.clear();
-                NavigationServices.goNextAndDoNotKeepHistory(context: context, widget: LoginScreen());
-
+                NavigationServices.goNextAndDoNotKeepHistory(
+                    context: context, widget: LoginScreen());
               },
               icon: Icons.logout,
             ),
@@ -108,72 +103,96 @@ final TextEditingController searchCont=TextEditingController();
         body: SingleChildScrollView(
           child: SafeArea(
             child: Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 15.0,vertical: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   CustomDropDownText(
-                    text: AppLocalizations.of(context)!.translate(SelectCat).toString(),
+                    text: AppLocalizations.of(context)!
+                        .translate(SelectCat)
+                        .toString(),
                   ),
-            Consumer<CategoriesListProvider>(builder: (context,cat,_){
-              return
-           CustomDropDownDecorationWidget(
-             selectedColor: selectedCat==null?false:true,
-             child: DropdownButton(
-                 value: selectedCat,
-                 underline: SizedBox(),
-                 isExpanded: true,
-                 hint: Text( AppLocalizations.of(context)!.translate(SelectCat).toString(),),
-                 items: cat.catList!.map((item){
-                   return DropdownMenuItem(
-                     child:Text(item.name??""),
-                     value: item.documentCategoryId,
-                   );
-                 } ).toList(),
-                 onChanged: (int? value){
-                   selectedCat=value!;
-                   setState(() {
-
-                   });
-                 }),
-           );
-            }),
+                  Consumer<CategoriesListProvider>(builder: (context, cat, _) {
+                    return CustomDropDownDecorationWidget(
+                      selectedColor: selectedCat == null ? false : true,
+                      child: DropdownButton(
+                          value: selectedCat,
+                          underline: SizedBox(),
+                          isExpanded: true,
+                          hint: Text(
+                            AppLocalizations.of(context)!
+                                .translate(SelectCat)
+                                .toString(),
+                          ),
+                          items: cat.catList!.map((item) {
+                            return DropdownMenuItem(
+                              child: Text(item.name ?? ""),
+                              value: item.documentCategoryId,
+                            );
+                          }).toList(),
+                          onChanged: (int? value) {
+                            selectedCat = value!;
+                            setState(() {});
+                          }),
+                    );
+                  }),
                   CustomTextField(
-                    headerText: AppLocalizations.of(context)!.translate(SearchDoc).toString(),
+                    headerText: AppLocalizations.of(context)!
+                        .translate(SearchDoc)
+                        .toString(),
                     hintText: "Search",
                     controller: searchCont,
                     suffixIcon: Icons.search,
-                    suffixOnTap: (){
-                      selectedCat!=null?
-                      NavigationServices.goNextAndKeepHistory(context: context, widget: DocSearchScreen(searchText: searchCont.text,catId: selectedCat??0,)):
-                      CustomSnackBar.failedSnackBar(context: context, message: "Select Category First");
+                    suffixOnTap: () {
+                      selectedCat != null
+                          ? NavigationServices.goNextAndKeepHistory(
+                              context: context,
+                              widget: DocSearchScreen(
+                                searchText: searchCont.text,
+                                catId: selectedCat ?? 0,
+                              ))
+                          : CustomSnackBar.failedSnackBar(
+                              context: context,
+                              message: "Select Category First");
                       searchCont.clear();
                     },
-                    onSubmit: (value){
-                      selectedCat!=null?
-                      NavigationServices.goNextAndKeepHistory(context: context, widget: DocSearchScreen(searchText: searchCont.text,catId: selectedCat??0,)):
-                      CustomSnackBar.failedSnackBar(context: context, message: "Select Category First");
+                    onSubmit: (value) {
+                      selectedCat != null
+                          ? NavigationServices.goNextAndKeepHistory(
+                              context: context,
+                              widget: DocSearchScreen(
+                                searchText: searchCont.text,
+                                catId: selectedCat ?? 0,
+                              ))
+                          : CustomSnackBar.failedSnackBar(
+                              context: context,
+                              message: "Select Category First");
                       searchCont.clear();
                     },
                   ),
-
-                  Consumer<FoldersProvider>(builder: (context,fold,_){
-                    List<Widget> widgets=[];
-                    fold.foldList!=null? fold.foldList!.forEach((element) {
-                      widgets.add(FolderCardView(
-                        foldName: element.name??"",
-                        onTap: (){
-                          element.docSubFolders!=null?NavigationServices.goNextAndKeepHistory(context: context, widget: DocSubFoldersScreen(
-                            docSubFolders: element.docSubFolders,
-                          )):
-                          NavigationServices.goNextAndKeepHistory(context: context, widget: DocCategoriesScreen(
-                            docCategory: element.documentCategory,
-                          ));
-                        },
-                      ));
-                    }):Text("No Folder exsist");
+                  Consumer<FoldersProvider>(builder: (context, fold, _) {
+                    List<Widget> widgets = [];
+                    fold.foldList != null
+                        ? fold.foldList!.forEach((element) {
+                            widgets.add(FolderCardView(
+                              foldName: element.name ?? "",
+                              onTap: () {
+                                element.docSubFolders != null
+                                    ? NavigationServices.goNextAndKeepHistory(
+                                        context: context,
+                                        widget: DocSubFoldersScreen(
+                                          docSubFolders: element.docSubFolders,
+                                        ))
+                                    : NavigationServices.goNextAndKeepHistory(
+                                        context: context,
+                                        widget: DocCategoriesScreen(
+                                          docCategory: element.documentCategory,
+                                        ));
+                              },
+                            ));
+                          })
+                        : Text("No Folder exsist");
                     return Center(
                       child: Wrap(
                         alignment: WrapAlignment.center,
@@ -182,8 +201,6 @@ final TextEditingController searchCont=TextEditingController();
                       ),
                     );
                   })
-
-
                 ],
               ),
             ),
@@ -193,10 +210,11 @@ final TextEditingController searchCont=TextEditingController();
     );
   }
 
-   languageChangeDialog() {
-    return showDialog(context: context, builder: (context){
-      return LanguageChangeDialogScreen();
-    });
-   }
+  languageChangeDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return LanguageChangeDialogScreen();
+        });
+  }
 }
-
