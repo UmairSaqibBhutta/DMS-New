@@ -156,7 +156,9 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
               width: 200.0,
               onTap: ()async{
 
+
                await uploadDocHandler();
+
                Navigator.pop(context);
 
               }
@@ -182,4 +184,5 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
       print('My Path ${file!.paths}');
     }
   }
+
 }

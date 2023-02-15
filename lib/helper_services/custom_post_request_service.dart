@@ -21,7 +21,7 @@ class PostRequestService {
       var jsonDecoded=json.decode(response.body);
       print("Lower");
       if (jsonDecoded==null || jsonDecoded['ResultType']!=1) {
-        // CustomSnackBar.failedSnackBar(context: context, message: jsonDecoded['Message']);
+        CustomSnackBar.failedSnackBar(context: context, message: jsonDecoded['Message']);
         return null;
       } else
         {
