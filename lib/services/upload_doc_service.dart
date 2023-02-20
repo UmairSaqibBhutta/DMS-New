@@ -17,7 +17,7 @@ class UploadDocumentService {
       required String userName,
       required List model,
       required BuildContext context,
-      required String attachments,
+       String ?attachments,
       required List<Attribute> attributes,
         required List<TextEditingController> contList,
       }) async {
@@ -41,27 +41,36 @@ class UploadDocumentService {
 
       var request = http.MultipartRequest('POST', Uri.parse(uploadDocUrl))
         ..fields.addAll(requestBody);
-      request.files.add(
+
+      attachments!=null?     request.files.add(
           http.MultipartFile(
-              'picture',
-              File(attachments).readAsBytes().asStream(),
-              File(attachments).lengthSync(),
-              filename: attachments.split("/").last,
+            'picture',
+            File(attachments).readAsBytes().asStream(),
+            File(attachments).lengthSync(),
+            filename: attachments.split("/").last,
           )
 
-      );
-      var response = await request.send();
-      final respStr = await response.stream.bytesToString();
+      ):null;
+      // var response = await request.send();
+      await request.send().then((value) async {
+        http.Response.fromStream(value).then((response) async {
+          final responseString = response.body;
+          if (response.statusCode == 200) {
+            print("upload succesfull");
+            print(response.statusCode);
+            print(response);
+            print("response body ${responseString}");
 
-      print("request body ${respStr}");
-      if(response.statusCode==200){
-        CustomSnackBar.showSnackBar(context: context, message: "Document Uploaded Successfully");
-      }
-      else{
-        CustomSnackBar.failedSnackBar(context: context, message: "Documents Not Uploaded");
-      }
-      var jsonDecoded=json.decode("Body ${requestBody}");
-
+            CustomSnackBar.showSnackBar(context: context, message: "Uploaded Successfully");
+          } else {
+            print("not Uploaded");
+            print("response body ${responseString}");
+            print("${response.statusCode}");
+            print("${response}");
+            CustomSnackBar.showSnackBar(context: context, message: "Error in Uploading");
+          }
+        });
+      });
 
     } catch (err) {
       print("Exception in upload documnet servoce $err");

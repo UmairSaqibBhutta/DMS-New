@@ -50,7 +50,7 @@ class _DocListScreenState extends State<DocListScreen> {
         backgroundColor: whiteColor,
         iconTheme: iconTheme,
         title: Text(
-          "Documents List ${doc.docList!.length}",
+          "Documents List",
           style: dashStyle,
         ),
       ),

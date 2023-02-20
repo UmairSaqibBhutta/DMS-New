@@ -52,17 +52,14 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
       empId: empId,
       userName: '$userName',
       model: [0],
-      attachments: pFile!.path ?? "",
+      attachments: pFile==null?null:pFile!.path,
       attributes: widget.attribute!,
       contList: _controller,
     );
     print("Pfile $pFile");
     print("Cat Id ${widget.catId}");
     CustomLoader.hideLoader(context);
-    if (res != null) {
-      CustomSnackBar.showSnackBar(
-          context: context, message: "Documents Uploaded Successfully");
-    }
+
   }
 
   @override
@@ -151,20 +148,14 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
         child: Column(
           children: [
             DefaultButton(
-              height: 38.0,
-              text: "Upload Documents",
-              width: 200.0,
-              onTap: ()async{
+                height: 38.0,
+                text: "Upload Documents",
+                width: 200.0,
+                onTap: () async {
+                  await uploadDocHandler();
 
-
-               await uploadDocHandler();
-
-               Navigator.pop(context);
-
-              }
-
-
-            ),
+                  Navigator.pop(context);
+                }),
           ],
         ),
       ),
@@ -172,7 +163,6 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
   }
 
   uploadFile() async {
-
     file = await FilePicker.platform.pickFiles(
       withData: true,
       type: FileType.custom,
@@ -185,5 +175,4 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
       print('My Path ${file!.paths}');
     }
   }
-
 }
