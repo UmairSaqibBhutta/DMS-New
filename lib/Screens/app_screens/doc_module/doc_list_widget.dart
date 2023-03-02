@@ -126,7 +126,7 @@ FilePickerResult? pickFile;
                         .docView!;
                     await _createFileFromBase64();
 
-                    log("file path = $filePath");
+                    // log("file path = $filePath");
                     view!.data != null
                         ? OpenFile.open(filePath)
                         : CustomSnackBar.failedSnackBar(

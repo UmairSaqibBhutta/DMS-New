@@ -25,6 +25,7 @@ class _DocCategoriesScreenState extends State<DocCategoriesScreen> {
     List<Widget> widgets=[];
     widget.docCategory?.forEach((element) {
       widgets.add(FolderCardView(foldName: element.name??"",
+      icon: Icons.category,
       onTap: (){
         NavigationServices.goNextAndKeepHistory(context: context, widget: DocListScreen(
           catId: element.documentCategoryId??0,
