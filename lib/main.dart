@@ -24,7 +24,7 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-void main() {
+void main() async{
   HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
 }
@@ -38,8 +38,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool isEng = true;
-  Locale? _locale = Locale('en', '');
+  // String isEng = false;
+  Locale? _locale;
 
   void setLocale(Locale value) {
     setState(() {
@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // TODO: implement initState
-    _getLang();
+    // _getLang();
     super.initState();
   }
 
@@ -87,10 +87,15 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  _getLang() async {
-    isEng = await getLanguage();
-    _locale = Locale(isEng ? 'en' : 'ar', '');
-
-    setState(() {});
-  }
+ //  _getLang() async {
+ // String  lang = await getLanguage();
+ //    print("Is Eng ///// $lang");
+ //    if(lang=='en') {
+ //      _locale=Locale('en', '');
+ //    }
+ //    else{
+ //      _locale=Locale('ar', '');
+ //    }
+ //    setState(() {});
+ //  }
 }

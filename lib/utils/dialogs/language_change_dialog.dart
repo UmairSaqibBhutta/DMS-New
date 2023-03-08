@@ -1,10 +1,10 @@
 
-
 import 'package:dms_new_project/configs/colors.dart';
 import 'package:dms_new_project/helper_widgets/custom_icon_button.dart';
 import 'package:dms_new_project/utils/local_storage_service/language_storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../configs/constants.dart';
 import '../../configs/text_styles.dart';
@@ -20,22 +20,26 @@ class LanguageChangeDialogScreen extends StatefulWidget {
 }
 
 class _LanguageChangeDialogScreenState extends State<LanguageChangeDialogScreen> {
-  bool isEnglishSelected=true;
+  bool isEnglishSelected=false;
   bool isArabicSelected=false;
-  setEnglishLanguage(){
-    saveLanguage(isEnglishSelected);
-    MyApp.of(context)!.setLocale( Locale.fromSubtags(languageCode:'en'));
+
+  setLanguage(){
+    saveLanguage(isEnglishSelected?'en':'ar');
+
+    MyApp.of(context)!.setLocale( Locale.fromSubtags(languageCode: isEnglishSelected ? 'en' : 'ar'));
 
   }
-  setArabicLanguage(){
-    print("Here");
-    saveLanguage(isArabicSelected);
-    print("tHere");
-    MyApp.of(context)!.setLocale(Locale.fromSubtags(languageCode:'ar'));
+
+@override
+  void initState() {
+    // TODO: implement initState
+  _loadCheckBoxState();
+  super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-     return Dialog(
+    return Dialog(
       alignment: Alignment.center,
       shape: circularBorder,
       elevation: 5.0,
@@ -69,25 +73,27 @@ class _LanguageChangeDialogScreenState extends State<LanguageChangeDialogScreen>
             ),
             divider,
             CheckboxListTile(
-                value: isEnglishSelected,
-                onChanged: (value){
-                  isEnglishSelected=value!;
-                  isArabicSelected=false;
-                  setState(() {
-                    setEnglishLanguage();
-                  });
-                },
+              value: isEnglishSelected,
+              onChanged: (value){
+                isEnglishSelected=value!;
+                isArabicSelected=false;
+                setState(() {
+                  setLanguage();
+                  _saveCheckBoxState();
+                });
+              },
               title: Text("English",style: langStyle,),
             ),
             CheckboxListTile(value: isArabicSelected,
-                onChanged:(value){
-              isArabicSelected=value!;
-              isEnglishSelected=false;
-              setState(() {
-                setArabicLanguage();
-              });
-                },
-            title: Text("Arabic",style: langStyle,),
+              onChanged:(value){
+                isArabicSelected=value!;
+                isEnglishSelected=false;
+                setState(() {
+                  setLanguage();
+                  _saveCheckBoxState();
+                });
+              },
+              title: Text("Arabic",style: langStyle,),
             ),
 
             // LanguageWidget(
@@ -101,6 +107,25 @@ class _LanguageChangeDialogScreenState extends State<LanguageChangeDialogScreen>
           ],
         ),
       ),
-    );;
+    );
   }
+  _loadCheckBoxState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      bool value1 = (prefs.getBool('checkBoxValue1') ?? false);
+      isEnglishSelected=value1;
+
+      bool value2 = (prefs.getBool('checkBoxValue2') ?? false);
+      isArabicSelected=value2;
+    });
+  }
+
+  _saveCheckBoxState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('checkBoxValue1', isEnglishSelected);
+    prefs.setBool('checkBoxValue2', isArabicSelected);
+  }
+
+
+
 }

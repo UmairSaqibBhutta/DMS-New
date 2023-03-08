@@ -1,21 +1,26 @@
+import 'package:dms_new_project/configs/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 
 class CustomLoader {
   static void showLoader(
       {required BuildContext context, String message = 'Please wait'}) {
-    AlertDialog androidDialog = AlertDialog(
-        content: LoaderContentWidget(
-      message: message,
-    ));
+
     print('loader started ..');
 
     showDialog(
-        barrierDismissible: false,
         context: context,
-        builder: (BuildContext context) {
-          return androidDialog;
-        });
+        barrierColor: Color(0x00ffffff),
+        builder: (_) => Dialog(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          child: SpinKitChasingDots(
+            color: appColor,
+            size: 50.0,
+          ),
+        ));
   }
 
   static void hideLoader(BuildContext context) {
@@ -58,3 +63,4 @@ class LoaderContentWidget extends StatelessWidget {
     );
   }
 }
+

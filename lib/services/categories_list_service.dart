@@ -19,8 +19,8 @@ class CategoriesListService {
         if (categoriesModel.data!.isNotEmpty) {
           cat.add(
               CategoriesList(
-                documentCategoryId: -1,
-                name: "Select Category",
+                documentCategoryId: 35,
+                name: "UnSelect",
                 docuementFolderId: 0,
                 docSub3FolderId: 0,
                 docSub2FolderId: 0,
@@ -35,10 +35,11 @@ class CategoriesListService {
         }
         for (var k in categoriesModel.data!) {
           cat.add(k);
+
         }
 
         Provider.of<CategoriesListProvider>(context, listen: false).updateCat(
-            newCat: categoriesModel.data
+            newCat: cat
         );
         return true;
       }

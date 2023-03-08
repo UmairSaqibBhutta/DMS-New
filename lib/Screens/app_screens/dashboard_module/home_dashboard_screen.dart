@@ -27,6 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../configs/constants.dart';
 import '../../../configs/text_styles.dart';
+import '../../../models/CategorisListModel.dart';
 import '../../../providers/doc_search_provider.dart';
 import '../../../utils/dialogs/language_change_dialog.dart';
 import '../../../utils/dialogs/show_will_pop_dialog.dart';
@@ -41,15 +42,37 @@ class HomeDashBoardScreen extends StatefulWidget {
 }
 
 class _HomeDashBoardScreenState extends State<HomeDashBoardScreen> {
+
+  List<CategoriesList> cat=[];
   int? selectedCat;
   final TextEditingController searchCont = TextEditingController();
+  _getCatHandler({required BuildContext context})async{
+    CustomLoader.showLoader(context: context);
+    await CategoriesListService().getCat(context: context);
+    cat=Provider.of<CategoriesListProvider>(context,listen: false).catList!;
+    print("Cat $cat");
+    setState(() {
 
+    });
+    CustomLoader.hideLoader(context);
+  }
+
+  @override
+  updateCat(int value){
+    if(value!=35){
+      selectedCat=value;
+      setState(() {
+
+      });
+    }
+    print("Value $value");
+  }
   @override
   void initState() {
     // TODO: implement initState
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getCatHandler(context: context);
+      _getCatHandler(context: context);
 
       getFoldersHandler(context: context, roleName: "Admin");
     });
@@ -113,30 +136,36 @@ class _HomeDashBoardScreenState extends State<HomeDashBoardScreen> {
                         .translate(SelectCat)
                         .toString(),
                   ),
-                  Consumer<CategoriesListProvider>(builder: (context, cat, _) {
-                    return CustomDropDownDecorationWidget(
-                      selectedColor: selectedCat == null ? false : true,
-                      child: DropdownButton(
-                          value: selectedCat,
-                          underline: SizedBox(),
-                          isExpanded: true,
-                          hint: Text(
-                            AppLocalizations.of(context)!
-                                .translate(SelectCat)
-                                .toString(),
-                          ),
-                          items: cat.catList!.map((item) {
-                            return DropdownMenuItem(
-                              child: Text(item.name ?? ""),
-                              value: item.documentCategoryId,
-                            );
-                          }).toList(),
-                          onChanged: (int? value) {
-                            selectedCat = value!;
-                            setState(() {});
-                          }),
-                    );
-                  }),
+                  // Consumer<CategoriesListProvider>(builder: (context, cat, _) {
+                  //   return
+                  //    ;
+                  // }),
+                 cat!=null?
+                 CustomDropDownDecorationWidget(
+                   selectedColor: cat == null ? false : true,
+                   child: DropdownButton(
+                       value: selectedCat,
+                       underline: SizedBox(),
+                       isExpanded: true,
+                       hint: Text(
+                         AppLocalizations.of(context)!
+                             .translate(SelectCat)
+                             .toString(),
+                       ),
+                       items: cat.map((item) {
+                         return DropdownMenuItem(
+                           child: Text(item.name ?? ""),
+                           value: item.documentCategoryId,
+                         );
+                       }).toList(),
+                       onChanged: (int? newValue) {
+                         if(updateCat!=null){
+                           updateCat(newValue!);
+                           setState(() {});
+                         }
+
+                       }),
+                 ):SizedBox(),
                   CustomTextField(
                     headerText: AppLocalizations.of(context)!
                         .translate(SearchDoc)
