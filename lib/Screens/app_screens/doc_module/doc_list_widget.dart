@@ -24,7 +24,6 @@ import '../../../providers/doc_view_provider.dart';
 import '../../../services/attach_doc_service.dart';
 import '../../../utils/dialogs/status_pending_dialog.dart';
 
-
 class DocListWidget extends StatefulWidget {
   DocumentsList doc;
 
@@ -38,20 +37,19 @@ class _DocListWidgetState extends State<DocListWidget> {
   String filePath = '';
   DocViewModel? view;
   PickedFile? cameraFile;
-FilePickerResult? pickFile;
+  FilePickerResult? pickFile;
 
   attachDocHandler(String path) async {
     CustomLoader.showLoader(context: context);
     int empId = await getEmpId();
     String userName = await getUserName();
-     await AttachDocService().attachDoc(
+    await AttachDocService().attachDoc(
         context: context,
         docId: widget.doc.documentId!,
         empId: empId,
         userName: userName,
         attachments: "$path");
     CustomLoader.hideLoader(context);
-
   }
 
   @override
@@ -59,7 +57,7 @@ FilePickerResult? pickFile;
     return Card(
       shape: circularBorder,
       elevation: 10.0,
-      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+      margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,12 +93,12 @@ FilePickerResult? pickFile;
           Card(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0),
-                side: BorderSide(color: appColor)),
-            margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+                side: const BorderSide(color: appColor)),
+            margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
             elevation: 4.0,
             child: ListTile(
               contentPadding:
-                  EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
               leading: Image.asset(widget.doc.documentType == "JPG"
                   ? jpg
                   : widget.doc.documentType == "PDF"
@@ -133,28 +131,23 @@ FilePickerResult? pickFile;
                             context: context, message: "File is incorrect");
                   } else {
                     showPendingDialog(
-                      context: context,
-                      cameraOnTap: () async {
-                        Navigator.pop(context);
-                        await takePicture();
-                        setState(() {
-                          attachDocHandler(
-                              cameraFile!.path
-                          );
-
+                        context: context,
+                        cameraOnTap: () async {
+                          Navigator.pop(context);
+                          await takePicture();
+                          setState(() {
+                            attachDocHandler(cameraFile!.path);
+                          });
+                        },
+                        chooseOnTap: () async {
+                          Navigator.pop(context);
+                          await chooseFile();
                         });
-
-                      },
-                      chooseOnTap: ()async{
-                        Navigator.pop(context);
-                       await chooseFile();
-                      }
-                    );
                   }
                 },
                 child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 6.0),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
                           10.0,
@@ -209,9 +202,7 @@ FilePickerResult? pickFile;
     );
     if (pickFile != null) {
       PlatformFile file = pickFile!.files.first;
-      attachDocHandler(
-        "${file.path}"
-      );
+      attachDocHandler("${file.path}");
       print("file.path ${file.path}");
     }
   }

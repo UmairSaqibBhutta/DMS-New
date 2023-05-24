@@ -18,18 +18,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-  _getUser()async{
-    var user=await getUser();
-    user!=null?
-    Timer(
-        Duration(seconds: 3),
+  _getUser() async {
+    var user = await getUser();
+    user != null
+        ? Timer(
+            const Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => HomeDashBoardScreen())))
-    :Timer(
-        Duration(seconds: 3),
+                builder: (BuildContext context) =>
+                    const HomeDashBoardScreen())))
+        : Timer(
+            const Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => LoginScreen())));
+                builder: (BuildContext context) => const LoginScreen())));
   }
 
   @override
@@ -38,24 +38,24 @@ class _SplashScreenState extends State<SplashScreen> {
     _getUser();
     getLang();
   }
+
   @override
   Widget build(BuildContext context) {
-      return  Scaffold(
-        backgroundColor: whiteColor,
-        body: Center(child: Image.asset("assets/images/dms_app_logo.png")),
-
-      );
+    return Scaffold(
+      backgroundColor: whiteColor,
+      body: Center(child: Image.asset("assets/images/dms_app_logo.png")),
+    );
   }
 
-  getLang()async{
-    String lang=await getLanguage();
-    if(lang=="ar"){
-      MyApp.of(context)!.setLocale( Locale.fromSubtags(languageCode: 'ar'));
-
+  getLang() async {
+    String lang = await getLanguage();
+    if (lang == "ar") {
+      MyApp.of(context)!
+          .setLocale(const Locale.fromSubtags(languageCode: 'ar'));
     }
-    if(lang=="en"){
-      MyApp.of(context)!.setLocale( Locale.fromSubtags(languageCode: 'en'));
-
+    if (lang == "en") {
+      MyApp.of(context)!
+          .setLocale(const Locale.fromSubtags(languageCode: 'en'));
     }
   }
 }
