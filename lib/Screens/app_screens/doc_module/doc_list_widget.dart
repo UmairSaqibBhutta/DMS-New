@@ -117,6 +117,7 @@ class _DocListWidgetState extends State<DocListWidget> {
               trailing: InkWell(
                 onTap: () async {
                   if (widget.doc.attachmentStatus == "Complete") {
+                    log("file path to open in completed status = $filePath");
                     await docViewHandler(
                         context: context,
                         filePath: widget.doc.noofVersions ?? "");
@@ -124,7 +125,6 @@ class _DocListWidgetState extends State<DocListWidget> {
                         .docView!;
                     await _createFileFromBase64();
 
-                    // log("file path = $filePath");
                     view!.data != null
                         ? OpenFile.open(filePath)
                         : CustomSnackBar.failedSnackBar(
