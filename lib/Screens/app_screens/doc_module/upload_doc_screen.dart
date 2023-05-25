@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dms_new_project/configs/colors.dart';
 import 'package:dms_new_project/configs/text_styles.dart';
 import 'package:dms_new_project/helper_services/custom_loader.dart';
@@ -45,21 +47,21 @@ class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
     CustomLoader.showLoader(context: context);
     int empId = await getEmpId();
     String userName = await getUserName();
-    var res = await UploadDocumentService().uploadDoc(
+    // var res =
+    await UploadDocumentService().uploadDoc(
       context: context,
       catId: widget.catId,
       notes: 'test by team',
       empId: empId,
-      userName: '$userName',
+      userName: userName,
       model: [0],
-      attachments: pFile==null?null:pFile!.path,
+      attachments: pFile == null ? null : pFile!.path,
       attributes: widget.attribute!,
       contList: _controller,
     );
-    print("Pfile $pFile");
-    print("Cat Id ${widget.catId}");
+    log("Pfile $pFile");
+    log("Cat Id ${widget.catId}");
     CustomLoader.hideLoader(context);
-
   }
 
   @override
