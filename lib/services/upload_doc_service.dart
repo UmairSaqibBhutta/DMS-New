@@ -25,7 +25,7 @@ class UploadDocumentService {
         'notes': notes,
         'EmployeeId': '$empId',
         'CurrentUserName': userName,
-        'model': '$model',
+        // 'model': '$model',
         'attachments': '$attachments'
       };
 
