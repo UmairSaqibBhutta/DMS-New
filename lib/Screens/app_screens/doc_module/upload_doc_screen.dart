@@ -21,23 +21,24 @@ class AddNewDocumentsScreen extends StatefulWidget {
   List<Attribute>? attribute;
   final int catId;
 
-  AddNewDocumentsScreen({required this.attribute, required this.catId});
+  AddNewDocumentsScreen(
+      {super.key, required this.attribute, required this.catId});
 
   @override
   State<AddNewDocumentsScreen> createState() => _AddNewDocumentsScreenState();
 }
 
 class _AddNewDocumentsScreenState extends State<AddNewDocumentsScreen> {
-  List<TextEditingController> _controller = [];
+  final List<TextEditingController> _controller = [];
 
   FilePickerResult? file;
   PlatformFile? pFile;
 
   @override
   void initState() {
-    // TODO: implement initState
-    for (int i = 1; i <= widget.attribute!.length; i++)
+    for (int i = 1; i <= widget.attribute!.length; i++) {
       _controller.add(TextEditingController());
+    }
     super.initState();
   }
 

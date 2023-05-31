@@ -29,16 +29,20 @@ class UploadDocumentService {
         'attachments': '$attachments'
       };
 
+      log("upload doc json = $requestBody");
+
       for (int i = 0; i < attributes.length; i++) {
         //key   value//
         requestBody['${attributes[i].name}'] = contList[i].text;
       }
+      log("upload doc json 2 = $requestBody");
 
       var request = http.MultipartRequest('POST', Uri.parse(uploadDocUrl))
         ..fields.addAll(requestBody);
 
       attachments != null
           ? request.files.add(http.MultipartFile(
+              // contentType:
               'picture',
               File(attachments).readAsBytes().asStream(),
               File(attachments).lengthSync(),

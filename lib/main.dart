@@ -49,7 +49,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     // _getLang();
     super.initState();
   }
@@ -67,7 +66,6 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => DocViewProvider())
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
@@ -99,3 +97,10 @@ class _MyAppState extends State<MyApp> {
   //    setState(() {});
   //  }
 }
+
+
+// api pagination issue at get document
+// if vesrsion 2 of doc, it will not show because list of images is not comming from
+// backend but a single string 
+// view doc 
+// if text is written other than number then doc wil lnot be uploaded

@@ -14,10 +14,6 @@ import '../helper_services/custom_snackbar.dart';
 import '../helper_widgets/custom_textfield.dart';
 import '../utils/helper_functions/email_validator.dart';
 
-
-
-
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -26,22 +22,24 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool isObscure=true;
-  TextEditingController emailCont=TextEditingController(
-    text: "l.lotfy@almajed4oud.com"
-  );
-  TextEditingController passwordCont=TextEditingController(
-    text: "Almajed4oud@123"
-  );
-  FocusNode emailFocus=FocusNode();
-  FocusNode passwordFocus=FocusNode();
+  bool isObscure = true;
+  TextEditingController emailCont =
+      TextEditingController(text: "l.lotfy@almajed4oud.com");
+  TextEditingController passwordCont =
+      TextEditingController(text: "Almajed4oud@123");
+  FocusNode emailFocus = FocusNode();
+  FocusNode passwordFocus = FocusNode();
 
-  loginHandler()async{
+  loginHandler() async {
     CustomLoader.showLoader(context: context);
-    var res=await LoginApiService().getUser(context: context, userName: emailCont.text, password: passwordCont.text);
+    var res = await LoginApiService().getUser(
+        context: context,
+        userName: emailCont.text,
+        password: passwordCont.text);
     CustomLoader.hideLoader(context);
-    if(res){
-      NavigationServices.goNextAndDoNotKeepHistory(context: context, widget: HomeDashBoardScreen());
+    if (res) {
+      NavigationServices.goNextAndDoNotKeepHistory(
+          context: context, widget: const HomeDashBoardScreen());
     }
   }
 
@@ -53,41 +51,47 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: appColor,
       ),
       body: Stack(
-
         alignment: Alignment.topCenter,
         children: [
           //
           Container(
-            alignment: Alignment.center,
+            alignment: Alignment.topCenter,
             height: 260.0,
             width: double.infinity,
             color: appColor,
-            child: Text(AppLocalizations.of(context)!.translate(DMSLOGIN).toString(),style: loginStyle,),
+            child: Text(
+              AppLocalizations.of(context)!.translate(DMSLOGIN).toString(),
+              style: loginStyle,
+            ),
           ),
+          // const SizedBox(
+          //   height: 10,
+          // ),
           Align(
             alignment: Alignment.center,
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
-
               height: 390.0,
               child: Card(
-                margin: EdgeInsets.only(left: 18.0,right: 18.0),
-
+                margin: const EdgeInsets.only(left: 18.0, right: 18.0),
                 shape: circularBorder,
                 elevation: 3.0,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 12.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-
-                        backgroundImage: AssetImage("assets/images/doc_logo.jpg"),
-                      maxRadius: 50.0,
+                      const CircleAvatar(
+                        backgroundImage:
+                            AssetImage("assets/images/doc_logo.jpg"),
+                        maxRadius: 50.0,
                       ),
                       CustomTextField(
-                        headerText: AppLocalizations.of(context)!.translate(EMAIL).toString(),
+                        headerText: AppLocalizations.of(context)!
+                            .translate(EMAIL)
+                            .toString(),
                         hintText: "Email Address",
                         controller: emailCont,
                         focusNode: emailFocus,
@@ -95,31 +99,31 @@ class _LoginScreenState extends State<LoginScreen> {
                         inputAction: TextInputAction.next,
                       ),
                       CustomTextField(
-                        headerText: AppLocalizations.of(context)!.translate(PASSWORD).toString(),
-                        hintText: "*****",
-                        controller: passwordCont,
-                        focusNode: passwordFocus,
-                        inputType: TextInputType.number,
-                        obscureText: isObscure,
-                        suffixIcon: isObscure?Icons.visibility:Icons.visibility_off,
-                        suffixOnTap: () {
-                          isObscure =! isObscure;
-                          setState(() {
-
-                          });
-                        }
-                      ),
+                          headerText: AppLocalizations.of(context)!
+                              .translate(PASSWORD)
+                              .toString(),
+                          hintText: "*****",
+                          controller: passwordCont,
+                          focusNode: passwordFocus,
+                          inputType: TextInputType.number,
+                          obscureText: isObscure,
+                          suffixIcon: isObscure
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          suffixOnTap: () {
+                            isObscure = !isObscure;
+                            setState(() {});
+                          }),
                       DefaultButton(
-                        text: AppLocalizations.of(context)!.translate(SIGNIN).toString(),
-
-                        onTap: (){
-                      if(validateLogin()){
-                        loginHandler();
-                      }
+                        text: AppLocalizations.of(context)!
+                            .translate(SIGNIN)
+                            .toString(),
+                        onTap: () {
+                          if (validateLogin()) {
+                            loginHandler();
+                          }
                         },
-
                       )
-
                     ],
                   ),
                 ),
@@ -130,20 +134,20 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  validateLogin(){
-    if(emailCont.text.isEmpty || !emailValidator(emailCont.text)){
-      CustomSnackBar.failedSnackBar(context: context, message: "Enter Valid Email");
+
+  validateLogin() {
+    if (emailCont.text.isEmpty || !emailValidator(emailCont.text)) {
+      CustomSnackBar.failedSnackBar(
+          context: context, message: "Enter Valid Email");
       emailFocus.requestFocus();
       return false;
-    }
-    else if(passwordCont.text.isEmpty){
-      CustomSnackBar.failedSnackBar(context: context, message: "Enter Valid Password");
+    } else if (passwordCont.text.isEmpty) {
+      CustomSnackBar.failedSnackBar(
+          context: context, message: "Enter Valid Password");
       passwordFocus.requestFocus();
       return false;
-    }
-    else{
+    } else {
       return true;
     }
   }
-
 }
