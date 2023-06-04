@@ -37,6 +37,7 @@ class AttachDocService {
       var response = await request.send();
 
       final body = await response.stream.bytesToString();
+      log("response body= $body");
 
       if (response.statusCode == 200) {
         CustomSnackBar.showSnackBar(
